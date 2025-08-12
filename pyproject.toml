@@ -1,0 +1,16 @@
+[project]
+name = "SnakeEngine"
+version = "0.01"
+description = "A hobby project written in Python."
+authors = [
+    {name = "PawloZiom"}
+]
+license = {text = "Custom"}
+keywords = ["game development"]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "glfw==2.9.0",
+    "PyOpenGL==3.1.8",
+    "PyOpenGL_accelerate==3.1.8"
+]

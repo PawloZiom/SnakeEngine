@@ -1,3 +1,0 @@
-alive_progress
-glfw
-pyinstaller
