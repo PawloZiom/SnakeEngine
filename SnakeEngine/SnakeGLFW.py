@@ -5,8 +5,10 @@ It also includes some error handling.
 """
 
 import glfw
-import glfw.GLFW
+import logging
 from enum import Enum
+
+logger = logging.getLogger("SnakeGLFW")
 
 def GetVersion(string: bool = False) -> tuple[int, int, int] | str:
     """
@@ -45,14 +47,13 @@ def Terminate():
 def GetPrimaryMonitor() -> glfw._GLFWmonitor | None:
     """
     Returns the primary monitor.
-    Raises an Exception when fails.
     
     Docs: https://www.glfw.org/docs/3.3/group__monitor.html#gac3adb24947eb709e1874028272e5dfc5
     """
     PrimaryMonitor = glfw.get_primary_monitor()
     if not PrimaryMonitor:
         Terminate()
-        raise Exception("Failed to get primary monitor")
+        logger.error("Failed to get primary monitor!")
     else:
         return PrimaryMonitor
     
@@ -77,6 +78,30 @@ class WindowPosition(Enum):
     BOTTOM_LEFT = 3
     BOTTOM_RIGHT = 4
     
+class WindowHint(Enum):
+    """ 
+    Enum for window hints.
+    
+    Docs: https://www.glfw.org/docs/latest/window_guide.html#window_hints
+    """
+    FOCUSED = glfw.FOCUSED
+    ICONIFIED = glfw.ICONIFIED
+    MAXIMIZED = glfw.MAXIMIZED
+    HOVERED = glfw.HOVERED
+    VISIBLE = glfw.VISIBLE
+    RESIZABLE = glfw.RESIZABLE
+    DECORATED = glfw.DECORATED
+    AUTO_ICONIFY = glfw.AUTO_ICONIFY
+    FLOATING = glfw.FLOATING
+    CENTER_CURSOR = glfw.CENTER_CURSOR
+    SCALE_TO_MONITOR = glfw.SCALE_TO_MONITOR
+    SCALE_FRAMEBUFFER = glfw.SCALE_FRAMEBUFFER
+    POSITION_X = glfw.POSITION_X
+    POSITION_Y = glfw.POSITION_Y
+    TRANSPARENT_FRAMEBUFFER = glfw.TRANSPARENT_FRAMEBUFFER
+    FOCUS_ON_SHOW = glfw.FOCUS_ON_SHOW
+    MOUSE_PASSTHROUGH = glfw.MOUSE_PASSTHROUGH  
+    
 class WindowAttribute(Enum):
     """ 
     Enum for window attributes.
@@ -91,7 +116,16 @@ class WindowAttribute(Enum):
     AUTO_ICONIFY = glfw.AUTO_ICONIFY
     FLOATING = glfw.FLOATING
     TRANSPARENT_FRAMEBUFFER = glfw.TRANSPARENT_FRAMEBUFFER
-    FOCUS_ON_SHOW = glfw.FOCUS_ON_SHOW    
+    FOCUS_ON_SHOW = glfw.FOCUS_ON_SHOW
+    MOUSE_PASSTHROUGH = glfw.MOUSE_PASSTHROUGH
+    
+def SetWindowHint(hint:WindowHint | WindowAttribute, value:bool) -> None:
+    """
+    Sets the specified window hint to the desired value.
+    
+    Docs: https://www.glfw.org/docs/latest/group__window.html#ga7d9c8c62384b1e2821c4dc48952d2033
+    """  
+    glfw.window_hint(hint.value, glfw.TRUE if value else glfw.FALSE)
     
 def ShowWindow(window: glfw._GLFWwindow):
     """
@@ -142,6 +176,14 @@ def DestroyWindow(window: glfw._GLFWwindow):
     """
     glfw.destroy_window(window)
 
+def MakeCurrentContext(window: glfw._GLFWwindow) -> None:
+    """ 
+    Makes the context of the specified window current for the calling thread.
+    
+    Docs: https://www.glfw.org/docs/latest/group__context.html#ga1c04dc242268f827290fe40aa1c91157
+    """
+    glfw.make_context_current(window)
+
 def CreateWindow(size: tuple[int, int] = (640, 480), title: str = "SnakeGLFW Window", monitor: glfw._GLFWmonitor | None = None, share: glfw._GLFWwindow | None = None) -> glfw._GLFWwindow:
     """
     Creates a window and its associated context.
@@ -152,9 +194,34 @@ def CreateWindow(size: tuple[int, int] = (640, 480), title: str = "SnakeGLFW Win
     CreatedWindow = glfw.create_window(size[0], size[1], title, monitor, share)
     if not CreatedWindow:
         Terminate()
-        raise Exception("Failed to create window")
+        logger.error("Failed to create window!")
     else:
         return CreatedWindow
+
+def WindowShouldClose(window: glfw._GLFWwindow) -> bool:
+    """
+    Returns the value of the close flag of the specified window.
+    
+    Docs: https://www.glfw.org/docs/latest/group__window.html#ga24e02fbfefbb81fc45320989f8140ab5
+    """
+    var = glfw.window_should_close(window)
+    return var  
+
+def SwapBuffers(window: glfw._GLFWwindow) -> None:
+    """
+    Swaps the front and back buffers of the specified window.
+    
+    Docs: https://www.glfw.org/docs/latest/group__window.html#ga15a5a1ee5b3c2ca6b15ca209a12efd14
+    """
+    glfw.swap_buffers(window)
+
+def PoolEvents() -> None:
+    """
+    Processes all pending events.
+    
+    Docs: https://www.glfw.org/docs/latest/group__window.html#ga37bd57223967b4211d60ca1a0bf3c832
+    """
+    glfw.poll_events()
 
 def Initialize() -> bool:
     """
@@ -163,15 +230,16 @@ def Initialize() -> bool:
     
     Docs: https://www.glfw.org/docs/3.3/group__init.html#ga317aac130a235ab08c6db0834907d85e
     """
-    print("[SnakeGLFW] Initializing GLFW...")
+    logger.info("Initializing GLFW...")
+    
     glfwVersion = GetVersion()
-    print(f"[SnakeGLFW] Using GLFW version: {glfwVersion[0]}.{glfwVersion[1]}.{glfwVersion[2]}")
+    logger.info(f"Using GLFW version: {glfwVersion[0]}.{glfwVersion[1]}.{glfwVersion[2]}")
     
     init = glfw.init()
     if not init:
         Terminate()
-        raise Exception("Failed to initialize GLFW!")
+        logger.error("Failed to initialize GLFW!")
     else:
-        print("[SnakeGLFW] GLFW initialized.")
+        logger.info("GLFW initialized")
         return True
     
