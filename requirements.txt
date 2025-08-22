@@ -1,0 +1,7 @@
+glfw
+PyOpenGL
+PyOpenGL_accelerate
+Pyrr
+Pillow
+numpy
+multipledispatch
