@@ -1,5 +1,16 @@
 """
 Snake Engine Core package
+
+Usage:
+    from snake.engine import Engine, debug
+    
+    engine = Engine()
+    engine.run()
+    
+    debug.info("Game started")
 """
 
-__all__ = ["core", "rendering", "physics", "audio", "utils"]
+from .engine import Engine
+from . import debug
+
+__all__ = ["Engine", "debug"]
