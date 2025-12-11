@@ -1,0 +1,12 @@
+Copyright (c) 2025 PawloZiom
+
+This source code is provided for personal, non-commercial, and local use only.
+
+You are **not allowed** to:
+- Publish or redistribute this code or any modifications (including uploading to GitHub or any other platform),
+- Use the code for any commercial purposes,
+- Sublicense or share it with others.
+
+You **may submit pull requests** to this repository.
+
+Any other use requires **prior written permission** from the author.

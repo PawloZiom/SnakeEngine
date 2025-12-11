@@ -1,0 +1,100 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snake-engine"
+version = "0.1.0-alpha"
+description = "A 3D/2D game engine written in pure Python with OpenGL, Vulkan and Metal rendering backends"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Paweł", email = "your.email@example.com"}
+]
+keywords = ["game-engine", "3d", "2d", "graphics", "opengl", "vulkan"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment",
+    "Topic :: Multimedia :: Graphics :: 3D",
+]
+requires-python = ">=3.9"
+
+dependencies = [
+    "glfw>=2.6.0",
+    "PyOpenGL>=3.1.5",
+    "pyglm>=2.7.0",
+    "Pillow>=10.0.0",
+    "numpy>=1.24.0",
+    "pybullet>=3.24",
+    "PyAudio>=0.2.13",
+    "attrs>=23.0.0",
+]
+
+[project.optional-dependencies]
+editor = [
+    "kivy>=2.2.0",
+    "kivy-garden>=0.1.5",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.12.0",
+    "pylint>=3.0.0",
+    "mypy>=1.7.0",
+]
+docs = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/SnakeEngine"
+Repository = "https://github.com/yourusername/SnakeEngine.git"
+Issues = "https://github.com/yourusername/SnakeEngine/issues"
+Documentation = "https://snakeengine.readthedocs.io"
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.pylint.messages_control]
+disable = [
+    "C0103",  # invalid-name
+    "C0114",  # missing-module-docstring
+    "R0913",  # too-many-arguments
+]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "--cov=snake --cov-report=html --cov-report=term-missing"
