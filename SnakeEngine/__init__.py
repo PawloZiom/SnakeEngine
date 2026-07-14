@@ -24,6 +24,7 @@ from .Audio.AudioSource import AudioSource
 from .Audio.AudioClip import AudioClip
 from .Audio.AudioManager import AudioManager
 from .Audio.AudioListener import AudioListener
+from .Audio.AudioDevice import AudioDevice
 
 from .Physics.Collider import Collider
 from .Physics.BoxCollider import BoxCollider
@@ -60,6 +61,7 @@ __all__ = [
     "AudioListener",
     "AudioSource",
     "AudioManager",
+    "AudioDevice",
     "Collider",
     "BoxCollider",
     "SphereCollider",

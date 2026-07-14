@@ -90,5 +90,4 @@ if __name__ == "__main__":
     fps_entity.AddComponent(FPSLabelUpdate)
 
     game.ActiveScene = scene
-
     game.Run()

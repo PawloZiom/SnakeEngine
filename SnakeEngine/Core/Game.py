@@ -13,6 +13,7 @@ from ..Rendering.GraphicsContext import GraphicsContext
 from ..Rendering.Camera import Camera
 from ..Rendering.Skybox import Skybox
 from .Input import Input
+from ..Audio.AudioManager import AudioManager
 from ..Rendering.MeshRenderer import MeshRenderer
 from ..UI.Canvas import UICanvas
 from ..UI.Button import UIButton
@@ -24,7 +25,6 @@ from ..Rendering.ShaderManager import ShaderManager
 from .Scene import Scene
 from .Logger import Logger, InitializeLogger
 from .GameEntity import GameEntity
-
 
 class Game:
     def __init__(self, settings: Optional[GameSettings] = None):
@@ -94,7 +94,8 @@ class Game:
 
         self.GameWindow.Fullscreen = True if Fullscreen else False
         self.GraphicsContext.MakeCurrent(self.GameWindow.Handle)
-
+        
+        AudioManager.Get().Initialize()
         Input._Initialize(self.GameWindow.Handle, SnakeGLFW())
         Logger.info("Input system initialized.")
 
@@ -108,6 +109,7 @@ class Game:
         if self.ActiveScene:
             self.ScriptMgr.ClearOrphanedScripts(self.ActiveScene.Entities)
         ShaderManager.cleanup()
+        AudioManager.Get().Shutdown()
         SnakeGLFW.Shutdown()
 
     def LockMouse(self):

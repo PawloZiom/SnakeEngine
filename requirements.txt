@@ -3,3 +3,5 @@ pyopengl
 pyopengl-accelerate
 numpy
 pillow
+PyOgg
+PyOpenAL
