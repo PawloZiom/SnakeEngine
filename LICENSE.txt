@@ -1,12 +1,65 @@
-Copyright (c) 2025 PawloZiom
+Copyright (c) 2025-2026 PawloZiom
 
-This source code is provided for personal, non-commercial, and local use only.
+1. DEFINITIONS
 
-You are **not allowed** to:
-- Publish or redistribute this code or any modifications (including uploading to GitHub or any other platform),
-- Use the code for any commercial purposes,
-- Sublicense or share it with others.
+"Engine" refers to the Snake Engine source code, libraries, modules, tools, editor, build scripts and all files that are part of the Snake Engine repository, unless explicitly stated otherwise.
 
-You **may submit pull requests** to this repository.
+"Game Content" refers to game-specific assets and content including, but not limited to: textures, models, audio, music, levels, scripts, gameplay logic, stories, characters and branding.
 
-Any other use requires **prior written permission** from the author.
+"Project" refers to any game, application or software created using Snake Engine.
+
+2. ENGINE SOURCE CODE LICENSE
+
+Snake Engine is distributed under a Source-Available License.
+
+You are allowed to:
+
+- Use Snake Engine for personal, educational, commercial and non-commercial purposes.
+- Modify the source code of Snake Engine.
+- Create games and applications using Snake Engine.
+- Distribute and sell games and applications created using Snake Engine.
+- Distribute modified versions of Snake Engine only as part of a game or application built using Snake Engine.
+- Fork the repository and submit Pull Requests or patches to the official project.
+
+You are NOT allowed to:
+
+- Redistribute Snake Engine as a standalone engine product.
+- Sell Snake Engine itself or any modified version of Snake Engine as a standalone engine.
+- Rebrand, sublicense or present Snake Engine as your own engine or development platform.
+- Remove or alter copyright notices, author information or this license from the engine source code.
+
+3. GAME CONTENT AND ASSETS
+
+Unless explicitly stated otherwise, all Game Content remains proprietary and is not covered by the Snake Engine source code license.
+
+You are NOT allowed to:
+
+- Redistribute Game Content outside of the Project.
+- Sell or commercially exploit Game Content without written permission from the author.
+- Modify or reuse Game Content in unrelated projects without permission.
+
+All Game Content remains the intellectual property of PawloZiom or its respective owners.
+
+4. CONTRIBUTIONS
+
+By submitting code, patches, Pull Requests or other contributions to the Snake Engine repository, you grant PawloZiom a perpetual, worldwide, non-exclusive, irrevocable and royalty-free license to use, modify, distribute, sublicense and incorporate your contribution into Snake Engine and related projects.
+
+You retain ownership of your contribution.
+
+5. NO ROYALTIES
+
+Projects created using Snake Engine do not require royalty payments, revenue sharing or licensing fees to PawloZiom.
+
+6. DISCLAIMER OF WARRANTY
+
+Snake Engine and all accompanying software are provided "AS IS", without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose and non-infringement.
+
+In no event shall the author be liable for any claim, damages or other liability arising from, out of or in connection with the software or the use of the software.
+
+7. TERMINATION
+
+Any violation of this license automatically terminates the rights granted under it.
+
+8. ACCEPTANCE
+
+By using, modifying or distributing Snake Engine, you agree to the terms of this license.

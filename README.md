@@ -8,4 +8,4 @@ Snake Engine is a hobby project written in Python.
 ## 🤝 Contributing
 
 ## 🛡️ License
-This repository uses a custom source-available license. See [LICENSE](./LICENSE) for details.
+This repository uses a custom source-available license. See [LICENSE](./LICENSE.txt) for details.
