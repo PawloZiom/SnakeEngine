@@ -1,7 +1,8 @@
-glfw
-pyopengl
-pyopengl-accelerate
-numpy
-pillow
-PyOgg
-PyOpenAL
+glfw==2.10.0
+PyOpenGL==3.1.10
+PyOpenGL_accelerate==3.1.10
+numpy==2.5.0
+pillow==12.3.0
+PyOgg==0.6.14a1
+PyOpenAL==0.7.11a1
+pybullet==3.2.7
