@@ -1,6 +1,7 @@
 from openal import alc
 from ..Core.Logger import Logger
 
+
 class AudioDevice:
     _instance = None
 
@@ -21,7 +22,9 @@ class AudioDevice:
 
         self._device = alc.alcOpenDevice(device_name.encode() if device_name else None)
         if not self._device:
-            raise RuntimeError("Could not open audio device (OpenAL). Check if OpenAL drivers are available (e.g., OpenAL Soft).")
+            raise RuntimeError(
+                "Could not open audio device (OpenAL). Check if OpenAL drivers are available (e.g., OpenAL Soft)."
+            )
 
         self._context = alc.alcCreateContext(self._device, None)
         if not self._context:
@@ -31,8 +34,11 @@ class AudioDevice:
 
         alc.alcMakeContextCurrent(self._context)
         self.IsInitialized = True
-        Logger.info("Audio system initialized. Using device: " + alc.alcGetString(self._device, alc.ALC_DEVICE_SPECIFIER).decode())
-        
+        Logger.info(
+            "Audio system initialized. Using device: "
+            + alc.alcGetString(self._device, alc.ALC_DEVICE_SPECIFIER).decode()
+        )
+
     def Shutdown(self):
         if not self.IsInitialized:
             return

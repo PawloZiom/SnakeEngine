@@ -22,16 +22,16 @@ class _FileSystemSingleton:
         if settings is None:
             settings = GameSettings()
 
-        if settings.custom_assets_path:
-            self._assets_dir = Path(settings.custom_assets_path).resolve()
+        if settings.CustomAssetsPath:
+            self._assets_dir = Path(settings.CustomAssetsPath).resolve()
         else:
             self._assets_dir = Path.cwd()
 
-        if settings.custom_user_data_path:
-            self._user_data_dir = Path(settings.custom_user_data_path).resolve()
+        if settings.CustomUserDataPath:
+            self._user_data_dir = Path(settings.CustomUserDataPath).resolve()
         else:
             self._user_data_dir = self._resolve_user_data_dir(
-                settings.company_name, settings.project_name
+                settings.CompanyName, settings.ProjectName
             )
 
         self._user_data_dir.mkdir(parents=True, exist_ok=True)

@@ -4,6 +4,7 @@ from openal import al
 from ..Core.GameScript import GameScript
 from .AudioClip import AudioClip
 
+
 class AudioSource(GameScript):
     def __init__(self):
         super().__init__()
@@ -47,7 +48,9 @@ class AudioSource(GameScript):
 
         al.alSourcef(self._SourceId, al.AL_GAIN, self.Volume)
         al.alSourcef(self._SourceId, al.AL_PITCH, self.Pitch)
-        al.alSourcei(self._SourceId, al.AL_LOOPING, al.AL_TRUE if self.Loop else al.AL_FALSE)
+        al.alSourcei(
+            self._SourceId, al.AL_LOOPING, al.AL_TRUE if self.Loop else al.AL_FALSE
+        )
         al.alSourcef(self._SourceId, al.AL_REFERENCE_DISTANCE, self.MinDistance)
         al.alSourcef(self._SourceId, al.AL_MAX_DISTANCE, self.MaxDistance)
         al.alSourcef(self._SourceId, al.AL_ROLLOFF_FACTOR, self.RolloffFactor)

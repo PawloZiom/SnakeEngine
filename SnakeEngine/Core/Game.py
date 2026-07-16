@@ -26,6 +26,7 @@ from .Scene import Scene
 from .Logger import Logger, InitializeLogger
 from .GameEntity import GameEntity
 
+
 class Game:
     def __init__(self, settings: Optional[GameSettings] = None):
         self._IsRunning = False
@@ -88,13 +89,13 @@ class Game:
         self.GameWindow = GameWindow(
             self.GraphicsContext,
             WindowSize,
-            self.Settings.title,
+            self.Settings.Title,
             DefaultAssets.ENGINE_ICON,
         )
 
         self.GameWindow.Fullscreen = True if Fullscreen else False
         self.GraphicsContext.MakeCurrent(self.GameWindow.Handle)
-        
+
         AudioManager.Get().Initialize()
         Input._Initialize(self.GameWindow.Handle, SnakeGLFW())
         Logger.info("Input system initialized.")

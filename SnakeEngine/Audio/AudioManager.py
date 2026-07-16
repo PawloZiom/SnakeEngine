@@ -4,7 +4,7 @@ from .AudioListener import AudioListener
 
 class AudioManager:
     _instance = None
-    
+
     @classmethod
     def Get(cls):
         if cls._instance is None:

@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 class DefaultAssets:
     _BaseDir = Path(__file__).resolve().parents[0]
 

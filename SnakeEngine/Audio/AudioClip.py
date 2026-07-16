@@ -8,6 +8,7 @@ try:
 except ImportError:
     pyogg = None
 
+
 class AudioClip:
     def __init__(self, filepath: Path):
         self.Filepath = str(filepath)
@@ -37,7 +38,9 @@ class AudioClip:
         elif ext == ".wav":
             decoded = pyogg.WaveFile(self.Filepath)
         else:
-            raise ValueError(f"Unsupported audio format: '{ext}'. Supported: .ogg, .opus, .flac, .wav")
+            raise ValueError(
+                f"Unsupported audio format: '{ext}'. Supported: .ogg, .opus, .flac, .wav"
+            )
 
         self.Channels = decoded.channels
         self.SampleRate = decoded.frequency
@@ -47,7 +50,9 @@ class AudioClip:
         elif self.Channels == 2:
             al_format = al.AL_FORMAT_STEREO16
         else:
-            raise ValueError(f"Unsupported number of channels: {self.Channels} (supported: mono, stereo)")
+            raise ValueError(
+                f"Unsupported number of channels: {self.Channels} (supported: mono, stereo)"
+            )
 
         buf = ctypes.c_uint(0)
 
@@ -64,8 +69,12 @@ class AudioClip:
         self.BufferId = buf.value
 
         bytes_per_sample = 2
-        total_samples_per_channel = decoded.buffer_length / bytes_per_sample / self.Channels
-        self.Duration = total_samples_per_channel / self.SampleRate if self.SampleRate else 0.0
+        total_samples_per_channel = (
+            decoded.buffer_length / bytes_per_sample / self.Channels
+        )
+        self.Duration = (
+            total_samples_per_channel / self.SampleRate if self.SampleRate else 0.0
+        )
 
         self.Loaded = True
 

@@ -89,13 +89,54 @@ class UICanvas:
         r, g, b, a = color
         self.Vertices.extend(
             [
-                x, y, u1, v1, r, g, b, a,
-                x + w, y, u2, v1, r, g, b, a,
-                x + w, y + h, u2, v2, r, g, b, a,
-                
-                x, y, u1, v1, r, g, b, a,
-                x + w, y + h, u2, v2, r, g, b, a,
-                x, y + h, u1, v2, r, g, b, a,
+                x,
+                y,
+                u1,
+                v1,
+                r,
+                g,
+                b,
+                a,
+                x + w,
+                y,
+                u2,
+                v1,
+                r,
+                g,
+                b,
+                a,
+                x + w,
+                y + h,
+                u2,
+                v2,
+                r,
+                g,
+                b,
+                a,
+                x,
+                y,
+                u1,
+                v1,
+                r,
+                g,
+                b,
+                a,
+                x + w,
+                y + h,
+                u2,
+                v2,
+                r,
+                g,
+                b,
+                a,
+                x,
+                y + h,
+                u1,
+                v2,
+                r,
+                g,
+                b,
+                a,
             ]
         )
 
@@ -129,7 +170,7 @@ class UICanvas:
         data = np.array(self.Vertices, dtype=np.float32)
         glBindBuffer(GL_ARRAY_BUFFER, self.Vbo)
         glBufferData(GL_ARRAY_BUFFER, data.nbytes, data, GL_DYNAMIC_DRAW)
-        
+
         glDrawArrays(GL_TRIANGLES, 0, len(self.Vertices) // 8)
         self.Vertices.clear()
 
@@ -164,8 +205,11 @@ class UICanvas:
             frame = entity.GetComponent(UIFrame)
             if frame:
                 self.PushQuad(
-                    frame.Bounds.Position.X, frame.Bounds.Position.Y,
-                    frame.Bounds.Width, frame.Bounds.Height, frame.Color
+                    frame.Bounds.Position.X,
+                    frame.Bounds.Position.Y,
+                    frame.Bounds.Width,
+                    frame.Bounds.Height,
+                    frame.Color,
                 )
         self._FlushBatch()
 
@@ -174,67 +218,115 @@ class UICanvas:
             if img:
                 if img.has_texture:
                     self._FlushBatch()
-                    
+
                     glBindTexture(GL_TEXTURE_2D, img.texture_id)
-                    
-                    glUniform1i(
-                        glGetUniformLocation(self.ShaderProgram, "isImage"),
-                        1
-                    )
-                    
+
+                    glUniform1i(glGetUniformLocation(self.ShaderProgram, "isImage"), 1)
+
                     self.PushQuad(
-                        img.Bounds.Position.X, img.Bounds.Position.Y,
-                        img.Bounds.Width, img.Bounds.Height, img.Color,
-                        0.0, 1.0, 1.0, 0.0
+                        img.Bounds.Position.X,
+                        img.Bounds.Position.Y,
+                        img.Bounds.Width,
+                        img.Bounds.Height,
+                        img.Color,
+                        0.0,
+                        1.0,
+                        1.0,
+                        0.0,
                     )
-                    
+
                     self._FlushBatch()
-                    
-                    glUniform1i(
-                        glGetUniformLocation(self.ShaderProgram, "isImage"),
-                        0
-                    )
-                    
+
+                    glUniform1i(glGetUniformLocation(self.ShaderProgram, "isImage"), 0)
+
                     glBindTexture(GL_TEXTURE_2D, self.TextureID)
                 else:
                     self.PushQuad(
-                        img.Bounds.Position.X, img.Bounds.Position.Y,
-                        img.Bounds.Width, img.Bounds.Height, img.Color
+                        img.Bounds.Position.X,
+                        img.Bounds.Position.Y,
+                        img.Bounds.Width,
+                        img.Bounds.Height,
+                        img.Color,
                     )
-                    
+
         for entity in entities:
             slider = entity.GetComponent(UISlider)
             if slider:
-                self.PushQuad(slider.Bounds.Position.X, slider.Bounds.Position.Y, slider.Bounds.Width, slider.Bounds.Height, slider.BackgroundColor)
+                self.PushQuad(
+                    slider.Bounds.Position.X,
+                    slider.Bounds.Position.Y,
+                    slider.Bounds.Width,
+                    slider.Bounds.Height,
+                    slider.BackgroundColor,
+                )
                 fill_w = slider.Bounds.Width * slider.Value
-                self.PushQuad(slider.Bounds.Position.X, slider.Bounds.Position.Y, fill_w, slider.Bounds.Height, slider.FillColor)
+                self.PushQuad(
+                    slider.Bounds.Position.X,
+                    slider.Bounds.Position.Y,
+                    fill_w,
+                    slider.Bounds.Height,
+                    slider.FillColor,
+                )
         self._FlushBatch()
 
         for entity in entities:
             btn = entity.GetComponent(UIButton)
             if btn:
                 render_color = (
-                    btn.BackgroundColor[0] * 0.5, btn.BackgroundColor[1] * 0.5,
-                    btn.BackgroundColor[2] * 0.5, btn.BackgroundColor[3]
-                ) if btn.IsHovered else btn.BackgroundColor
+                    (
+                        btn.BackgroundColor[0] * 0.5,
+                        btn.BackgroundColor[1] * 0.5,
+                        btn.BackgroundColor[2] * 0.5,
+                        btn.BackgroundColor[3],
+                    )
+                    if btn.IsHovered
+                    else btn.BackgroundColor
+                )
 
-                self.PushQuad(btn.Bounds.Position.X, btn.Bounds.Position.Y, btn.Bounds.Width, btn.Bounds.Height, render_color)
-                
+                self.PushQuad(
+                    btn.Bounds.Position.X,
+                    btn.Bounds.Position.Y,
+                    btn.Bounds.Width,
+                    btn.Bounds.Height,
+                    render_color,
+                )
+
                 text_scale = 0.5
-                total_text_w = sum([self.FontCharacters.get(c, self.FontCharacters[" "])["advance"] for c in btn.Text]) * text_scale
+                total_text_w = (
+                    sum(
+                        [
+                            self.FontCharacters.get(c, self.FontCharacters[" "])[
+                                "advance"
+                            ]
+                            for c in btn.Text
+                        ]
+                    )
+                    * text_scale
+                )
                 text_x = btn.Bounds.Position.X + (btn.Bounds.Width - total_text_w) / 2
-                text_y = btn.Bounds.Position.Y + (btn.Bounds.Height - (self.FontBaseHeight * text_scale)) / 2
+                text_y = (
+                    btn.Bounds.Position.Y
+                    + (btn.Bounds.Height - (self.FontBaseHeight * text_scale)) / 2
+                )
                 self.PushString(btn.Text, text_x, text_y, text_scale, btn.TextColor)
 
         for entity in entities:
             txt = entity.GetComponent(UIText)
             if txt:
-                self.PushString(txt.Text, txt.Position.X, txt.Position.Y, txt.Scale, txt.Color)
-                
+                self.PushString(
+                    txt.Text, txt.Position.X, txt.Position.Y, txt.Scale, txt.Color
+                )
+
             label = entity.GetComponent(UILabel)
             if label:
-                self.PushString(label.Text, label.Position.X, label.Position.Y, label.Scale, label.Color)
-                
+                self.PushString(
+                    label.Text,
+                    label.Position.X,
+                    label.Position.Y,
+                    label.Scale,
+                    label.Color,
+                )
+
         self._FlushBatch()
 
         glBindVertexArray(0)

@@ -26,18 +26,7 @@ class SnakeGLFW:
     def SetWindowIcon(window_handle, image_path: str):
         try:
             img = Image.open(image_path).convert("RGBA")
-            width, height = img.size
-            raw_bytes = img.tobytes()
-
-            image = glfw._GLFWimage()
-            image.width = width
-            image.height = height
-
-            image.pixels = ctypes.cast(
-                ctypes.c_char_p(raw_bytes), ctypes.POINTER(ctypes.c_ubyte)
-            )
-
-            glfw._glfw.glfwSetWindowIcon(window_handle, 1, ctypes.byref(image))
+            glfw.set_window_icon(window_handle, 1, img)
             Logger.info(f"Window icon set successfully from: {image_path}")
         except Exception as e:
             Logger.error(f"Error occurred while loading icon {image_path}: {e}")

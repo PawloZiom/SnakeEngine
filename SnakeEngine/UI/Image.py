@@ -7,15 +7,16 @@ from .Extent import UIExtent
 from ..Core.FileSystem import FileSystem
 from ..Core.Logger import Logger
 
+
 class UIImage:
     def __init__(
-        self, 
-        x: float, 
-        y: float, 
-        width: float, 
-        height: float, 
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height: float,
         color: Tuple[float, float, float, float] = (1.0, 1.0, 1.0, 1.0),
-        path: Optional[str] = None
+        path: Optional[str] = None,
     ):
         self.Bounds = UIExtent(x, y, width, height)
         self.Color = color
@@ -66,14 +67,17 @@ class UIImage:
         try:
             img = Image.open(io.BytesIO(img_bytes))
             img = img.transpose(Image.FLIP_TOP_BOTTOM)
-        
+
             if img.mode != "RGBA":
                 img = img.convert("RGBA")
-                
+
             img_data = img.tobytes("raw", "RGBA")
             width, height = img.size
         except Exception as e:
-            Logger.error(f"Failed to parse image file '{self._path}' via Pillow: {e}", exc_info=True)
+            Logger.error(
+                f"Failed to parse image file '{self._path}' via Pillow: {e}",
+                exc_info=True,
+            )
             return
 
         try:
@@ -95,13 +99,18 @@ class UIImage:
                 0,
                 GL_RGBA,
                 GL_UNSIGNED_BYTE,
-                img_data
+                img_data,
             )
-            
+
             glBindTexture(GL_TEXTURE_2D, 0)
-            Logger.info(f"Successfully uploaded UI texture '{self._path}' to GPU (ID: {self._texture_id}, Resolution: {width}x{height})")
+            Logger.info(
+                f"Successfully uploaded UI texture '{self._path}' to GPU (ID: {self._texture_id}, Resolution: {width}x{height})"
+            )
         except Exception as e:
-            Logger.error(f"Failed to upload UI texture '{self._path}' to OpenGL: {e}", exc_info=True)
+            Logger.error(
+                f"Failed to upload UI texture '{self._path}' to OpenGL: {e}",
+                exc_info=True,
+            )
             self._cleanup_texture()
 
     def _cleanup_texture(self):

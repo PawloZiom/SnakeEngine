@@ -23,17 +23,20 @@ class AudioListener(GameScript):
 
     def OnActivate(self):
         from .AudioManager import AudioManager
+
         if AudioManager.Get().ActiveListener is None:
             AudioManager.Get().SetListener(self)
 
     def OnDeactivate(self):
         from .AudioManager import AudioManager
+
         mgr = AudioManager.Get()
         if mgr.ActiveListener is self:
             mgr.SetListener(None)
 
     def OnUpdate(self, delta_time: float):
         from .AudioManager import AudioManager
+
         manager = AudioManager.Get()
 
         if manager.ActiveListener is not self or self.Entity is None:

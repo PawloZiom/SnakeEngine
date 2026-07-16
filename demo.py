@@ -14,13 +14,13 @@ class Rotating(GameScript):
 
 if __name__ == "__main__":
     settings = GameSettings()
-    settings.title = "Snake Engine Demo"
-    settings.company_name = "SnakeEngineTeam"
-    settings.project_name = "SnakeEngineDemo"
+    settings.Title = "Snake Engine Demo"
+    settings.CompanyName = "SnakeEngineTeam"
+    settings.ProjectName = "SnakeEngineDemo"
 
-    settings.screen_width = 1024
-    settings.screen_height = 768
-    settings.fullscreen = False
+    settings.WindowWidth = 1024
+    settings.WindowHeight = 768
+    settings.Fullscreen = False
 
     game = Game(settings)
     scene = Scene()
@@ -79,7 +79,13 @@ if __name__ == "__main__":
     image_placeholder = scene.CreateEntity()
     image_placeholder.Name = "Image"
     image_placeholder.AddComponent(
-        UIImage, x=40, y=280, width=210, height=150, color=(1.0, 1.0, 1.0, 1.0), path=DefaultAssets.ENGINE_ICON
+        UIImage,
+        x=40,
+        y=280,
+        width=210,
+        height=150,
+        color=(1.0, 1.0, 1.0, 1.0),
+        path=DefaultAssets.ENGINE_ICON,
     )
 
     fps_entity = scene.CreateEntity()
