@@ -27,17 +27,12 @@ By contributing to this project you agree that your contributions may be used, m
 Please open an issue before making major architectural changes.
 
 ## 🛡️ License
-This repository uses a custom source-available license. 
+This project is licensed under the **Mozilla Public License 2.0 (MPL 2.0)**. 
 
-You may:
-- Create games and applications using Snake Engine.
-- Modify the engine source code.
-- Sell games created in Snake Engine.
-- Submit pull requests and contributions.
+In short:
+- You **can** use Snake Engine to create and sell commercial games.
+- You **can** modify the engine source code.
+- Any modifications to the existing engine files **must** be made public under the same MPL 2.0 license.
+- Original copyright notices must remain intact.
 
-You may not:
-- Sell Snake Engine as a standalone product.
-- Redistribute Snake Engine as your own engine.
-- Remove copyright notices or author information.
-
-See [LICENSE](./LICENSE.txt) for full details.
+See the [LICENSE](./LICENSE) file for the full legal text.
