@@ -22,6 +22,7 @@ from .ScriptManager import ScriptManager
 from .FileSystem import FileSystem
 from .GameSettings import GameSettings
 from ..Rendering.ShaderManager import ShaderManager
+from ..Physics.PhysicsManager import PhysicsManager
 from .Scene import Scene
 from .Logger import Logger, InitializeLogger
 from .GameEntity import GameEntity
@@ -102,6 +103,10 @@ class Game:
 
         self.GlobalCanvas = UICanvas()
         self.ActiveScene = Scene()
+
+        PhysicsManager.Initialize()
+        Logger.info("Physics initialized (PyBullet).")
+
         self._IsRunning = True
         Logger.info("Ready!")
 
@@ -111,6 +116,7 @@ class Game:
             self.ScriptMgr.ClearOrphanedScripts(self.ActiveScene.Entities)
         ShaderManager.cleanup()
         AudioManager.Get().Shutdown()
+        PhysicsManager.Shutdown()
         SnakeGLFW.Shutdown()
 
     def LockMouse(self):
@@ -127,6 +133,7 @@ class Game:
             if self._last_time is None:
                 self._last_time = now
                 self._fps_timer = now
+                SnakeGLFW.PollEvents()
                 continue
 
             SnakeGLFW.PollEvents()
@@ -134,7 +141,10 @@ class Game:
             current_time = time.perf_counter()
             DeltaTime = current_time - self._last_time
             self._last_time = current_time
-            if DeltaTime > 0.1:
+
+            if DeltaTime < 0.0001:
+                DeltaTime = 0.0001
+            elif DeltaTime > 0.1:
                 DeltaTime = 0.1
 
             Input._UpdateStates()
@@ -160,57 +170,59 @@ class Game:
             mx, my = Input.GetMousePosition()
             lpm_pressed_state = Input.IsMouseButtonPressed("LEFT")
 
-            if self.ActiveScene:
-                for entity in self.ActiveScene.Entities:
-                    btn = entity.GetComponent(UIButton)
-                    if btn:
-                        b = btn.Bounds
-                        if (
-                            b.Position.X <= mx <= b.Position.X + b.Width
-                            and b.Position.Y <= my <= b.Position.Y + b.Height
-                        ):
-                            btn.IsHovered = True
-                        else:
-                            btn.IsHovered = False
+            active_entities = (
+                [e for e in self.ActiveScene.Entities if e.IsActive]
+                if self.ActiveScene
+                else []
+            )
+
+            for entity in active_entities:
+                btn = entity.GetComponent(UIButton)
+                if btn:
+                    b = btn.Bounds
+                    if (
+                        b.Position.X <= mx <= b.Position.X + b.Width
+                        and b.Position.Y <= my <= b.Position.Y + b.Height
+                    ):
+                        btn.IsHovered = True
+                    else:
+                        btn.IsHovered = False
 
             if lpm_pressed_state:
-                if not self._lpm_pressed and self.ActiveScene:
-                    for entity in self.ActiveScene.Entities:
+                if not self._lpm_pressed:
+                    for entity in active_entities:
                         btn = entity.GetComponent(UIButton)
                         if btn and btn.Callback and btn.IsHovered:
                             btn.Callback()
                     self._lpm_pressed = True
 
-                if self.ActiveScene:
-                    for entity in self.ActiveScene.Entities:
-                        slider = entity.GetComponent(UISlider)
-                        if slider:
-                            b = slider.Bounds
-                            if slider.IsDragging or (
-                                b.Position.X <= mx <= b.Position.X + b.Width
-                                and b.Position.Y <= my <= b.Position.Y + b.Height
-                            ):
-                                slider.IsDragging = True
-                                relative_x = mx - b.Position.X
-                                new_val = relative_x / b.Width
-                                slider.Value = max(0.0, min(1.0, new_val))
+                for entity in active_entities:
+                    slider = entity.GetComponent(UISlider)
+                    if slider:
+                        b = slider.Bounds
+                        if slider.IsDragging or (
+                            b.Position.X <= mx <= b.Position.X + b.Width
+                            and b.Position.Y <= my <= b.Position.Y + b.Height
+                        ):
+                            slider.IsDragging = True
+                            relative_x = mx - b.Position.X
+                            new_val = relative_x / b.Width
+                            slider.Value = max(0.0, min(1.0, new_val))
             else:
                 self._lpm_pressed = False
-                if self.ActiveScene:
-                    for entity in self.ActiveScene.Entities:
-                        slider = entity.GetComponent(UISlider)
-                        if slider:
-                            slider.IsDragging = False
+                for entity in active_entities:
+                    slider = entity.GetComponent(UISlider)
+                    if slider:
+                        slider.IsDragging = False
 
             if self.ActiveScene:
                 self._fixed_timer += DeltaTime
                 while self._fixed_timer >= self._FIXED_DELTA:
-                    self.ScriptMgr.OnFixedUpdate(
-                        self.ActiveScene.Entities, self._FIXED_DELTA
-                    )
+                    self.ScriptMgr.OnFixedUpdate(active_entities, self._FIXED_DELTA)
+                    PhysicsManager.Step(self._FIXED_DELTA)
                     self._fixed_timer -= self._FIXED_DELTA
 
-                self.ScriptMgr.OnUpdate(self.ActiveScene.Entities, DeltaTime)
+                self.ScriptMgr.OnUpdate(active_entities, DeltaTime)
 
             self.GameWindow.UpdateDimensions()
 
@@ -223,7 +235,7 @@ class Game:
                     else 1.0
                 )
 
-                for entity in self.ActiveScene.Entities:
+                for entity in active_entities:
                     cam = entity.GetComponent(Camera)
                     if cam:
                         view_matrix = cam.GetViewMatrix(entity.Transform)
@@ -243,20 +255,20 @@ class Game:
                 )
 
                 if view_matrix and proj_matrix:
-                    for entity in self.ActiveScene.Entities:
+                    for entity in active_entities:
                         sky = entity.GetComponent(Skybox)
                         if sky:
                             sky.Render(proj_matrix, view_matrix)
 
                 if view_matrix and proj_matrix:
-                    for entity in self.ActiveScene.Entities:
+                    for entity in active_entities:
                         mesh = entity.GetComponent(MeshRenderer)
                         if mesh:
                             mesh.Render(entity.Transform, view_matrix, proj_matrix)
 
                 if self.GlobalCanvas:
                     self.GlobalCanvas.Render(
-                        self.ActiveScene.Entities,
+                        active_entities,
                         self.GameWindow.Width,
                         self.GameWindow.Height,
                     )

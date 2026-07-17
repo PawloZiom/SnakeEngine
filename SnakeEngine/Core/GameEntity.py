@@ -22,23 +22,18 @@ class GameEntity:
 
     @property
     def IsActive(self):
-
         return self._IsActive
 
     def Activate(self):
-
         if not self._IsActive:
             self._IsActive = True
-
             for comp in self.Components.values():
                 if isinstance(comp, GameScript):
                     comp.OnActivate()
 
     def Deactivate(self):
-
         if self._IsActive:
             self._IsActive = False
-
             for comp in self.Components.values():
                 if isinstance(comp, GameScript):
                     comp.OnDeactivate()
@@ -57,7 +52,15 @@ class GameEntity:
         return component_instance
 
     def GetComponent(self, component_class):
-        return self.Components.get(component_class, None)
+        if component_class in self.Components:
+            return self.Components[component_class]
+
+        for cls, instance in self.Components.items():
+            if issubclass(cls, component_class):
+                return instance
+        return None
 
     def HasComponent(self, component_class):
-        return component_class in self.Components
+        if component_class in self.Components:
+            return True
+        return any(issubclass(cls, component_class) for cls in self.Components.keys())

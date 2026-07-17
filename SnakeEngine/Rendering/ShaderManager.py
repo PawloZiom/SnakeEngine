@@ -263,7 +263,6 @@ class _ShaderManagerSingleton:
             if isinstance(uname, bytes):
                 uname = uname.decode(errors="replace")
 
-            # Clean up array suffix (e.g. "lights[0]" -> "lights")
             uname = re.sub(r"\[\d+\]$", "", uname)
             loc = glGetUniformLocation(prog.gl_id, uname)
 
